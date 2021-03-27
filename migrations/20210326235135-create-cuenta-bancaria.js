@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       saldo: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
