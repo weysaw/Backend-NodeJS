@@ -4,8 +4,7 @@
     "password": "1234",
     "database": "banco",
     "host": "localhost",
-    "dialect": "mysql",
-    "operatorAliases" : 0
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
