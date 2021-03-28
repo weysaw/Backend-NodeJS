@@ -18,6 +18,7 @@ app.use(express.json());
  * Se establece las respuestas para la direcciones
  */
 app.use(router);
+
 /**
  * Inicicia el servidor
  */
