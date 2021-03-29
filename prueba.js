@@ -1,19 +1,27 @@
 const models = require('./models');
 const Habiente = models.Habiente;
 const Bancaria = models.CuentaBancaria;
+const HabienteBancaria = models.HabienteBancaria;
 
 async function demoAsociacionMuchosAMuchos() {
-    await Habiente.sync({ force: true }).then(() => {
+    await HabienteBancaria.destroy({where: {}}).then(() => {
         console.log("Se sincronizaron las tablas");
     }).catch(() => {
         console.log("Error en las tablas");
     });
-    await Bancaria.sync({ force: true }).then(() => {
+    await Habiente.destroy({where: {}}).then(() => {
         console.log("Se sincronizaron las tablas");
-    }).catch(() => {
+    }).catch((e) => {
+        console.log(e);
         console.log("Error en las tablas");
     });
-
+    await Bancaria.destroy({where: {}}).then(() => {
+        console.log("Se sincronizaron las tablas");
+    }).catch((e) => {
+        console.log(e);
+        console.log("Error en las tablas");
+    });
+    //await HabienteBancaria.sync({ force: true })
     await Habiente.create({
         nombre: "Axel"
     });
@@ -30,18 +38,19 @@ async function demoAsociacionMuchosAMuchos() {
 
     let cuentasBancarias = await Bancaria.findAll();
     // Asociar todos los cursos al estudiante
-    await habiente.addCuentaBancarias(cuentasBancarias, { through: { id: "1" } });
+    await habiente.addCuentaBancaria(cuentasBancarias, { through: { id: "1" } });
     //Desplegar los datos de los cursos asociados al estudiante
-    let cuentas = await habiente.getCuentaBancarias();
+    let cuentas = await habiente.getCuentaBancaria();
     console.log(`Cuentas del habiente: `, habiente.id);
     cuentas.forEach((cuenta) => console.log(cuenta.id, cuenta.saldo));
     // Al hacer la asociacion de estudiante con curso se puede acceder
     // el dato del alumno através del curso
-    let curso = await Bancaria.findOne({ where: { id: "1" } });
-    let habientes = await curso.getHabientes();
+    let cuenta = await Bancaria.findOne({ where: { id: "1" } });
+    console.log(cuenta);
+    let habientes = await cuenta.getHabiente();
     console.log("Cuentas de Banco:");
-    habientes.forEach((habiente) => console.log(habiente.id, habiente.nombre));
+    await habientes.forEach((habiente) => console.log(habiente.id, habiente.nombre));
     models.sequelize.close();
 }
 
-demoAsociacionMuchosAMuchos();
+demoAsociacionMuchosAMuchos().catch(() => console.log("Error"));
