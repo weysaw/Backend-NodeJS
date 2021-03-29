@@ -1,5 +1,8 @@
-const express = require('express'); 
+const express = require('express');
 const router = express();
+const models = require('../models');
+const HB = models.HabienteBancaria;
+
 
 /**
  * Respuesta de inicio del servidor

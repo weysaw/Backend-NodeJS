@@ -8,11 +8,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      HabienteId: {
-        type: Sequelize.INTEGER
-      },
       bancariaId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "CuentaBancaria",
+          key: 'id'
+        }
+      },
+      habienteId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Habientes",
+          key: 'id'
+        }
       },
       createdAt: {
         allowNull: false,

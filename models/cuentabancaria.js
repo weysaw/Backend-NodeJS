@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
   });
   CuentaBancaria.associate = (models) => {
     CuentaBancaria.belongsToMany(models.Habiente, {
-      as: "Habientes",
+      as: "Habiente",
       through: 'habientebancaria',
-      foreignKey: "habienteId"
+      foreignKey: "bancariaId"
     });
   };
   return CuentaBancaria;
