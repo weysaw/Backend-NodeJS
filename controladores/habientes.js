@@ -1,21 +1,23 @@
-const hab = require('../modelos/cuentahabiente');
-let i = 0;
+const models = require('../models');
+const Habiente = models.Habiente;
+
 /**
  * Agrega un cuenta habientes
  * 
  * @param {Object} req Solicitud del cliente
  * @param {Object} res Respuesta del servidor
  */
-const postHabientes = (req, res) => {
-    const info = req.body.nombre;
+const postHabientes = async (req, res) => {
+    const info = req.body;
     console.log("POST habientes");
-    if (info != undefined) {
-        i++;
-        hab.agregarHabiente(i, info);
+
+    await Habiente.create(info).then(() => {
         res.send("Datos Agregados Con Exito");
-    } else 
-        res.send("Error no se mandado ningun dado");
-    
+    }).catch(() => {
+        res.send("Error en los datos");
+    }).finally(() => {
+        res.end();
+    })
 };
 
 /**
@@ -24,8 +26,9 @@ const postHabientes = (req, res) => {
  * @param {Object} req Solicitud del cliente
  * @param {Object} res Respuesta del servidor
  */
-const getHabientes = (req, res) => {
-    res.json(hab.devolverCuentas());
+const getHabientes = async (req, res) => {
+    res.json(await Habiente.findAll());
+    res.end();
 };
 
 /**
@@ -34,11 +37,22 @@ const getHabientes = (req, res) => {
  * @param {Object} req Solicitud del cliente
  * @param {Object} res Respuesta del servidor
  */
-const putHabientes = (req, res) => {
+const putHabientes = async (req, res) => {
     const info = req.body;
-    if (info != undefined)
-        res.status(200).send(hab.modificarHabiente(info.id, info.nombre));
-
+    const habiente = await Habiente.findOne({
+        where: { id: info.id }
+    });
+    if (habiente != undefined) {
+        habiente.nombre = await info.nombre;
+        await habiente.save()
+            .then(() => {
+                res.send(`Dato modificado con exito`);
+            }).catch(() => {
+                res.send(`Error al modificar el dato`);
+            })
+    } else
+        res.send("Dato no encontrado");
+    res.end();
 }
 /**
  * Borra la cuenta de un habientes especificado
@@ -46,15 +60,24 @@ const putHabientes = (req, res) => {
  * @param {Object} req Solicitud del cliente
  * @param {Object} res Respuesta del servidor
  */
-const deleteHabientes = (req, res) => {
+const deleteHabientes = async (req, res) => {
     const info = req.body;
-    if (info != undefined)
-        res.status(200).send(hab.borrarHabiente(info.id));
+    const habiente = await Habiente.findOne({
+        where: { id: info.id }
+    });
+
+    if (habiente != undefined) {
+        await habiente.destroy()
+            .then(() => {
+                res.send("Dato eliminado con exito");
+            }).catch(() => {
+                res.send("Error al eliminar el dato");
+            })
+    }
     else
-        res.status(404).send("ERROR 404");
-
+        res.send("Dato no encontrado");
+    res.end();
 }
-
 exports.postHabientes = postHabientes;
 exports.getHabientes = getHabientes;
 exports.putHabientes = putHabientes;
