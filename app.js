@@ -28,6 +28,20 @@ iniciar();
 app.use(router);
 
 /**
+ * Respuesta de páginas que no existen
+ * 
+ * @param {Object} req Solicitud del cliente
+ * @param {Object} res Respuesta del servidor
+ */
+ router.use('/', (req, res, next) => {
+    res.status(404).json({
+        type: "error",
+        msg: "Dirección no valida"
+    });
+});
+
+
+/**
  * Inicia el servidor
  */
 const servidor = app.listen(app.get('port'), () => {
