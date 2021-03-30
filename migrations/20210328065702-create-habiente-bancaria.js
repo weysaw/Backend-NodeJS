@@ -1,4 +1,5 @@
 'use strict';
+//Se utiliza para crear la tabla en la BD
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('HabienteBancaria', {
