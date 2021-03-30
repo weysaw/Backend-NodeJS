@@ -1,8 +1,14 @@
 'use strict';
-
+/**
+ * Exportación del modelo de habiente bancaria
+ * 
+ * @param {Object} sequelize Es la clase sequelize
+ * @param {Object} DataTypes Se usa para indicar el tipo de dato
+ * @returns El modelo del HabienteBancaria
+ */
 module.exports = (sequelize, DataTypes) => {
   const HabienteBancaria = sequelize.define('HabienteBancaria', {
-    // Model attributes are defined here
+    // Definiciones de atributos
     bancariaId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -20,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
-    // Other model options go here
   });
   return HabienteBancaria;
 };
