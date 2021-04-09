@@ -1,6 +1,12 @@
-const models = require('../models');
-const Habiente = models.Habiente;
+const Habiente = require('../modelos/cuentahabiente');
 
+const respuesta = (tipo, msg) => {
+    return { type: tipo, msg: msg };
+};
+
+const errorServidor = (res) => {
+    res.status(500).json(respuesta(`error`, `Error de servidor`));
+};
 /**
  * Agrega un cuenta habiente
  * 
@@ -9,17 +15,16 @@ const Habiente = models.Habiente;
  */
 const postHabientes = async (req, res) => {
     //Información recibida del cliente
-    const info = req.body;
-    console.log("POST habientes");
-    //Crea el habiente
-    await Habiente.create(info).then(() => {
-        res.send("Datos Agregados Con Exito");
-    }).catch(() => {
-        res.send("Error en los datos");
-    }).finally(() => {
-        //Finaliza la respuesta
+    try {
+        await Habiente.agregaCuentarHabiente(req.body)
+        res.status(200).json(respuesta(`exito`, `Datos agregados con exito`));
+    } catch (error) {
+        res.status(500).json(respuesta(`error`, `error en los datos`));
+    } finally {
         res.end();
-    })
+    }
+
+
 };
 
 /**
@@ -31,9 +36,9 @@ const postHabientes = async (req, res) => {
 const getHabientes = async (req, res) => {
     try {
         //Le manda toda la información de los habientes
-        res.json(await Habiente.findAll());
+        res.json(await Habiente.devolverCuentas());
     } catch (error) {
-        res.status(500).send("Error de servidor");
+        errorServidor(res);
         console.error(error);
     } finally {
         res.end();
@@ -51,27 +56,16 @@ const putHabientes = async (req, res) => {
         //Información recibida del cliente
         const info = req.body;
         //Valida que la información sea correcta
-        if (info.id != undefined && info.nombre != undefined) {
-            //Busca la cuenta de habiente
-            const habiente = await Habiente.findOne({ where: { id: info.id } });
-            //Si encuentra el habiente modifica los datos
-            if (habiente != null) {
-                //Modifica el nombre del habiente
-                habiente.nombre = await info.nombre;
-                //Salva los dato en la BD
-                await habiente.save()
-                    .then(() => {
-                        res.send(`Dato modificado con exito`);
-                    }).catch(() => {
-                        res.send(`Error al modificar el dato`);
-                    })
-            } else
-                res.send("Habiente no encontrado");
-        } else
-            res.send("Datos mandados incorrectamente");
+        if (info.id == undefined || info.nombre == undefined)
+            return res.status(400).json(respuesta(`error`, `Datos mandados incorrectamente`));
+        await Habiente.modificarHabiente(info.id, info.nombre);
+        res.status(200).json(respuesta(`exito`, `Dato modificado con exito`));
     } catch (error) {
-        res.status(500).send("Error de servidor");
         console.error(error);
+        if (error.num != undefined)
+            res.status(error.num).json(respuesta(error.type, error.msg));
+        else
+            errorServidor(res);
     } finally {
         //Finaliza la conexión
         res.end();
@@ -89,26 +83,16 @@ const deleteHabientes = async (req, res) => {
         //Información recibida del cliente
         const info = req.body.id;
         //Valida que el dato haya sido enviado correctamente
-        if (info != undefined) {
-            //Busca la cuenta de habiente
-            const habiente = await Habiente.findOne({ where: { id: info } });
-            //Si encuentra el habiente lo borra
-            if (habiente != undefined) {
-                //Borra al habiente de la tabla
-                await habiente.destroy()
-                    .then(() => {
-                        res.send("Dato eliminado con exito");
-                    }).catch(() => {
-                        res.send("Error al eliminar el dato");
-                    })
-            }
-            else
-                res.send("Dato no encontrado");
-        } else
-            res.send("Datos mandados de la forma incorrecta");
+        if (info == undefined)
+            return res.status(400).json(`Datos mandados de la forma incorrecta`);
+        await Habiente.borrarHabiente(info);
+        res.status(200).json(respuesta(`exito`, `Dato eliminado con exito`));
     } catch (error) {
-        res.status(500).send("Error de servidor");
         console.error(error);
+        if (error.num != undefined)
+            res.status(error.num).json(respuesta(error.type, error.msg));
+        else
+            errorServidor(res);
     } finally {
         res.end();
     }
