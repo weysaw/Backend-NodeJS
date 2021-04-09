@@ -21,11 +21,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Habientes",
+        model: "CuentaHabiente",
         key: 'id'
       }
     }
   }, {
+    freezeTableName: true
   });
   return HabienteBancaria;
 };
