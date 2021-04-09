@@ -2,7 +2,7 @@
 //Se utiliza para crear la tabla en la BD
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Habientes', {
+    await queryInterface.createTable('CuentaHabiente', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -23,6 +23,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Habientes');
+    await queryInterface.dropTable('CuentaHabiente');
   }
 };
