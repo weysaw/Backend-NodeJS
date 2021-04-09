@@ -14,12 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    // Other model options go here
+    freezeTableName: true
   });
   //Relacion de muchos a muchos
   CuentaBancaria.associate = (models) => {
-    CuentaBancaria.belongsToMany(models.Habiente, {
-      as: "Habiente",
+    CuentaBancaria.belongsToMany(models.CuentaHabiente, {
+      as: "CuentaHabiente",
       through: 'habientebancaria',
       foreignKey: "bancariaId"
     });

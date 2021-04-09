@@ -7,14 +7,15 @@
  * @param {Object} DataTypes Se usa para indicar el tipo de dato
  * @returns El modelo del Habiente
  */
-module.exports = (sequelize, DataTypes) => {
-  const Habiente = sequelize.define('Habiente', {
+const cuentaHabiente = (sequelize, DataTypes) => {
+  const Habiente = sequelize.define('CuentaHabiente', {
     // Definición de atributos
     nombre: {
       type: DataTypes.STRING,
       allowNull: false
     }
   }, {
+    freezeTableName: true
   });
   //Se hace la relación de muchos a muchos
   Habiente.associate = (models) => {
@@ -24,5 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "habienteId"
     });
   };
+
   return Habiente;
 };
+
+
+module.exports = cuentaHabiente;
