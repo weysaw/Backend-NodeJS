@@ -141,7 +141,7 @@ const putRetirarSaldo = async (req, res) => {
 const getConsultarSaldo = async (req, res) => {
     try {
         //Información del cliente
-        const dato = req.body.id;
+        const dato = req.query?.id;
         //Verifica el dato si esta correcto
         if (dato == undefined)
             return res.status(400).json(respuesta(`error`, `Datos erroneos`));
