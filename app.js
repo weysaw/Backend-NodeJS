@@ -5,6 +5,7 @@ const fs = require("fs");
 const https = require("https");
 const router = require(`./routes/index`);
 const sequelize = require('./models').sequelize;
+const cors = require('cors');
 
 const llavePrivada = fs.readFileSync("private.key");
 const certificado = fs.readFileSync("certificate.crt");
@@ -14,7 +15,8 @@ const credenciales = {
     passphrase: "1234" //passwd de la llave privada usado en la creación del certificado
 };
 
-
+// Configurar cabeceras y cors
+app.use(cors());
 //Configuración
 process.env.port = 4001;
 app.set('json spaces', 2);
