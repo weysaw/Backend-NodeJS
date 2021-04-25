@@ -13,7 +13,7 @@ const validarHabiente = async (dato, accion) => {
         throw { num: 400, type: `error`, msg: `datos erroneos` };
     //Verifica los habientes y si se han enviado datos
     const habiente = await Habiente.buscarHabiente(dato.habienteId);
-    
+
     if (habiente == null)
         throw { num: 400, type: `error`, msg: `Habiente no encontrado` };
 
@@ -45,16 +45,19 @@ const agregarCuenta = async (info) => {
  */
 const devolverCuentas = async () => {
     let mensaje, habientes, final = [];
+    let datos;
     //Devuelve todas cuentas existentes
     const cuentas = await Bancaria.findAll();
     //Recorre por todas las cuentas y todos los habientes
     for (const cuenta of cuentas) {
-        mensaje = []
+        mensaje = [];
+        datos = [];
         habientes = await cuenta.getCuentaHabiente();
         mensaje.push(cuenta);
         //Recorre los habientes de la cuenta
         for (const hab of habientes)
-            mensaje.push({ habienteId: hab.id, nombre: hab.nombre });
+            datos.push({ habienteId: hab.id, nombre: hab.nombre });
+        mensaje.push(datos);
         final.push(mensaje);
     }
     return final;
@@ -93,7 +96,7 @@ const deposito = async (id, saldo) => {
     const cuenta = await buscarCuentaBancaria(id);
     // si no encuentra la cuenta se lo indica
     if (cuenta == null)
-        throw { num: 400, type: `error`, msg: `No hay cuentas bancarias` };
+        throw { num: 400, type: `error`, msg: `Cuentas bancaria no encontrada` };
     //deposita a la cuenta
     cuenta.saldo += saldo;
     //salva los datos a la BD
