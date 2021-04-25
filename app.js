@@ -20,7 +20,7 @@ app.use(cors());
 //Configuración
 process.env.port = 4001;
 app.set('json spaces', 2);
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 /**

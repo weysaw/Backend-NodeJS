@@ -11,14 +11,14 @@ router.post('/cuentas', cta.postCuentasBancarias);
 
 router.get('/cuentas', cta.getCuentasBancarias);
 
-router.get('/cuentas/saldo', cta.getConsultarSaldo);
+router.get('/cuentas/saldo/:id', cta.getConsultarSaldo);
 
 router.post('/cuentas/saldo', cta.postDepositarSaldo);
 
-router.put('/cuentas/saldo/retirar', cta.putRetirarSaldo);
+router.post('/cuentas/saldo/retirar', cta.postRetirarSaldo);
 
-router.put('/cuentas/transferencia', cta.putTransferencia);
+router.post('/cuentas/transferencia', cta.postTransferencia);
 
-router.delete('/cuentas', cta.deleteCuenta);
+router.delete('/cuentas/:id/', cta.deleteCuenta);
 
 module.exports = router;
