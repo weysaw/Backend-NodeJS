@@ -111,7 +111,7 @@ const postDepositarSaldo = async (req, res) => {
  * @param {Object} req Solicitud del cliente
  * @param {Object} res Respuesta del servidor 
  */
-const putRetirarSaldo = async (req, res) => {
+const postRetirarSaldo = async (req, res) => {
     try {
         //Información del cliente
         const dato = req.body;
@@ -141,7 +141,7 @@ const putRetirarSaldo = async (req, res) => {
 const getConsultarSaldo = async (req, res) => {
     try {
         //Información del cliente
-        const dato = req.query?.id;
+        const dato = req?.params?.id;
         //Verifica el dato si esta correcto
         if (dato == undefined)
             return res.status(400).json(respuesta(`error`, `Datos erroneos`));
@@ -164,7 +164,7 @@ const getConsultarSaldo = async (req, res) => {
  * @param {Object} req Solicitud del cliente 
  * @param {Object} res Respuesta del servidor
  */
-const putTransferencia = async (req, res) => {
+const postTransferencia = async (req, res) => {
     try {
         //Información del cliente
         const dato = req.body;
@@ -192,7 +192,7 @@ const putTransferencia = async (req, res) => {
 const deleteCuenta = async (req, res) => {
     try {
         //Información del cliente
-        const dato = req.body.id;
+        const dato = req?.params?.id;
         //Si los datos son correctos realiza las acciones
         if (dato == undefined)
             return res.status(400).json(`Datos erroneos`);
@@ -217,6 +217,6 @@ exports.postCuentasBancarias = postCuentasBancarias;
 exports.agregarHabienteCuentaBancaria = agregarHabienteCuentaBancaria;
 exports.postDepositarSaldo = postDepositarSaldo;
 exports.getConsultarSaldo = getConsultarSaldo;
-exports.putRetirarSaldo = putRetirarSaldo;
-exports.putTransferencia = putTransferencia;
+exports.postRetirarSaldo = postRetirarSaldo;
+exports.postTransferencia = postTransferencia;
 exports.deleteCuenta = deleteCuenta;

@@ -54,7 +54,8 @@ const getHabientes = async (req, res) => {
 const putHabientes = async (req, res) => {
     try {
         //Información recibida del cliente
-        const info = req.body;
+        const info = req?.params;
+        info.nombre = req?.body.nombre;
         //Valida que la información sea correcta
         if (info.id == undefined || info.nombre == undefined)
             return res.status(400).json(respuesta(`error`, `Datos mandados incorrectamente`));
@@ -69,7 +70,6 @@ const putHabientes = async (req, res) => {
     } finally {
         //Finaliza la conexión
         res.end();
-
     }
 }
 /**
@@ -81,7 +81,7 @@ const putHabientes = async (req, res) => {
 const deleteHabientes = async (req, res) => {
     try {
         //Información recibida del cliente
-        const info = req.body.id;
+        const info = req?.params?.id;
         //Valida que el dato haya sido enviado correctamente
         if (info == undefined)
             return res.status(400).json(`Datos mandados de la forma incorrecta`);
@@ -89,7 +89,9 @@ const deleteHabientes = async (req, res) => {
         res.status(200).json(respuesta(`exito`, `Dato eliminado con exito`));
     } catch (error) {
         console.error(error);
-        if (error.num != undefined)
+        if (error.name == `SequelizeForeignKeyConstraintError`)
+            res.status(400).json(respuesta(400, "No se puede borrar el habiente porque tiene una cuenta bancaria"));
+        else if (error.num != undefined)
             res.status(error.num).json(respuesta(error.type, error.msg));
         else
             errorServidor(res);
